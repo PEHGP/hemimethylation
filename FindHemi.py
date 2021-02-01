@@ -26,8 +26,10 @@ def GetCGHemi(f,d):
 		if l[2]=="-":
 			continue
 		rev=lines[i+1].rstrip().split("\t")
-		if rev[2]!="-" or rev[1]!=int(l[1])+1:
+		if rev[2]!="-" or int(rev[1])!=int(l[1])+1:
 			print("error")
+			print(l)
+			print(rev)
 			sys.exit()
 		fwd_m=float(l[3])
 		fwd_um=float(l[4])
@@ -73,11 +75,11 @@ if __name__ == '__main__':
 	pvalues=float(sys.argv[2])
 	flist=sys.argv[3:] #CX_report.txt.gz list
 	Fr_CG=open(prefix+"_CG_hemi.bed","w")
+	Fr_CHG=open(prefix+"_CHG_hemi.bed","w")
 	dCHG={}
 	dCG={}
-	gl=
 	for f in flist:
-		dCH=GetCGHemi(f,dCH)
+		dCG=GetCGHemi(f,dCG)
 		dCHG=GetCHGHemi(f,dCHG)
 	for c in dCG:
 		for p in dCG[c]:
@@ -89,6 +91,5 @@ if __name__ == '__main__':
 			p_value=Gmt(dCHG[c][p])
 			if p_value<=pvalues:
 				Fr_CHG.write(c+"\t"+p+"\t"+str(int(p)+2)+"\n")
-
-
-		
+	Fr_CG.close()
+	Fr_CHG.close()
