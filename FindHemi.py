@@ -36,12 +36,24 @@ def GetCGHemi(f,d):
 		rev_m=float(rev[3])
 		rev_um=float(rev[4])
 		try:
-			d[l[0]][l[1]].append(fwd_m/(fwd_m+fwd_um))
-			d[l[0]][l[1]].append(rev_m/(rev_m+rev_um))
+			if fwd_m+fwd_um!=0:
+				d[l[0]][l[1]].append(fwd_m/(fwd_m+fwd_um))
+			else:
+				d[l[0]][l[1]].append(0)
+			if rev_m+rev_um!=0:
+				d[l[0]][l[1]].append(rev_m/(rev_m+rev_um))
+			else:
+				d[l[0]][l[1]].append(0)
 		except:
 			d[l[0]][l[1]]=[]
-			d[l[0]][l[1]].append(fwd_m/(fwd_m+fwd_um))
-			d[l[0]][l[1]].append(rev_m/(rev_m+rev_um))
+			if fwd_m+fwd_um!=0:
+				d[l[0]][l[1]].append(fwd_m/(fwd_m+fwd_um))
+			else:
+				d[l[0]][l[1]].append(0)
+			if rev_m+rev_um!=0:
+				d[l[0]][l[1]].append(rev_m/(rev_m+rev_um))
+			else:
+				d[l[0]][l[1]].append(0)
 	return d
 def GetCHGHemi(f,d):
 	lines=os.popen("zgrep -P '\tCHG\t' %s"%f).readlines()
@@ -63,12 +75,24 @@ def GetCHGHemi(f,d):
 		rev_m=float(rev[3])
 		rev_um=float(rev[4])
 		try:
-			d[l[0]][l[1]].append(fwd_m/(fwd_m+fwd_um))
-			d[l[0]][l[1]].append(rev_m/(rev_m+rev_um))
+			if fwd_m+fwd_um!=0:
+				d[l[0]][l[1]].append(fwd_m/(fwd_m+fwd_um))
+			else:
+				d[l[0]][l[1]].append(0)
+			if rev_m+rev_um!=0:
+				d[l[0]][l[1]].append(rev_m/(rev_m+rev_um))
+			else:
+				d[l[0]][l[1]].append(0)
 		except:
 			d[l[0]][l[1]]=[]
-			d[l[0]][l[1]].append(fwd_m/(fwd_m+fwd_um))
-			d[l[0]][l[1]].append(rev_m/(rev_m+rev_um))
+			if fwd_m+fwd_um!=0:
+				d[l[0]][l[1]].append(fwd_m/(fwd_m+fwd_um))
+			else:
+				d[l[0]][l[1]].append(0)
+			if rev_m+rev_um!=0:
+				d[l[0]][l[1]].append(rev_m/(rev_m+rev_um))
+			else:
+				d[l[0]][l[1]].append(0)
 	return d
 if __name__ == '__main__':
 	prefix=sys.argv[1]
