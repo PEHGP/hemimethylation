@@ -67,8 +67,10 @@ def GetCHGHemi(f,d):
 		if l[-1]=="CCG":
 			continue
 		rev=lines[i+1].rstrip().split("\t")
-		if rev[2]!="-" or rev[1]!=int(l[1])+2:
+		if rev[2]!="-" or int(rev[1])!=int(l[1])+2:
 			print("error")
+			print(l)
+			print(rev)
 			sys.exit()
 		fwd_m=float(l[3])
 		fwd_um=float(l[4])
