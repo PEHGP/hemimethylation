@@ -7,13 +7,19 @@ def FisherExactTest():
 def Gmt(MList,treatment=1):
 	X=[]
 	y=[]
+	if len(set(MList))==1:
+		return 1
 	for m in MList:
+		if m==1:
+			m=0.99999999
+		elif m==0:
+			m=0.00000001
 		y.append(np.log(m/(1-m)))
 		X.append(treatment)
 	X=sm.add_constant(X,prepend=False)
 	mod=sm.OLS(y,X)
 	res = mod.fit()
-	print(res.summary())
+	#print(res.summary())
 	p=res.pvalues[0]
 	return p
 def GetCGHemi(f,d):
@@ -100,8 +106,8 @@ if __name__ == '__main__':
 	prefix=sys.argv[1]
 	pvalues=float(sys.argv[2])
 	flist=sys.argv[3:] #CX_report.txt.gz list
-	Fr_CG=open(prefix+"_CG_hemi.bed","w")
-	Fr_CHG=open(prefix+"_CHG_hemi.bed","w")
+	Fr_CG=open(prefix+"_CG_hemi_ori.bed","w")
+	Fr_CHG=open(prefix+"_CHG_hemi_ori.bed","w")
 	dCHG={}
 	dCG={}
 	for f in flist:
@@ -119,3 +125,5 @@ if __name__ == '__main__':
 				Fr_CHG.write(c+"\t"+p+"\t"+str(int(p)+2)+"\n")
 	Fr_CG.close()
 	Fr_CHG.close()
+	os.system("bedtools sort -i %s_CG_hemi_ori.bed|bedtools merge -d 5 -i - >%s_CG_hemi_final.bed"%(prefix,prefix)) #-d need change
+	os.system("bedtools sort -i %s_CHG_hemi_ori.bed|bedtools merge -d 5 -i - >%s_CHG_hemi_final.bed"%(prefix,prefix)) #-d need change
