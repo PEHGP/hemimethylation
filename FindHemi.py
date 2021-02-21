@@ -4,23 +4,25 @@ import numpy as np
 import statsmodels.api as sm
 def FisherExactTest():
 	pass
-def Gmt(MList,treatment=1):
+def Gmt(MList):
 	X=[]
 	y=[]
+	epsilon=1e-07
 	if len(set(MList))==1:
 		return 1
-	for m in MList:
-		if m==1:
-			m=0.99999999
-		elif m==0:
-			m=0.00000001
-		y.append(np.log(m/(1-m)))
-		X.append(treatment)
+	#print(MList)
+	MList=np.array(MList)
+	MList=np.clip(MList,epsilon,1-epsilon)
+	y=np.log(MList/(1-MList))
+	#print(y)
+	X=[1 if i%2==0 else 0 for i in range(1,len(y)+1)]
+	#print(X)
 	X=sm.add_constant(X,prepend=False)
 	mod=sm.OLS(y,X)
 	res = mod.fit()
 	#print(res.summary())
 	p=res.pvalues[0]
+	#print(p)
 	return p
 def GetCGHemi(f,d):
 	lines=os.popen("zgrep -P '\tCG\t' %s"%f).readlines()
