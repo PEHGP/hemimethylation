@@ -2,7 +2,8 @@
 import sys,pandas,os,collections
 import numpy as np
 import statsmodels.api as sm
-def FisherExactTest():
+import scipy.stats as stats
+def FisherExactTest(MList):
 	pass
 def Gmt(MList):
 	X=[]
@@ -108,6 +109,7 @@ if __name__ == '__main__':
 	prefix=sys.argv[1]
 	pvalues=float(sys.argv[2])
 	flist=sys.argv[3:] #CX_report.txt.gz list
+	diff=0.75 #need change
 	Fr_CG=open(prefix+"_CG_hemi_ori.bed","w")
 	Fr_CHG=open(prefix+"_CHG_hemi_ori.bed","w")
 	dCHG={}
@@ -117,15 +119,23 @@ if __name__ == '__main__':
 		dCHG=GetCHGHemi(f,dCHG)
 	for c in dCG:
 		for p in dCG[c]:
-			 p_value=Gmt(dCG[c][p])
-			 if p_value<=pvalues:
-			 	Fr_CG.write(c+"\t"+p+"\t"+str(int(p)+1)+"\n")
+			MList=dCG[c][p]
+			#diff=np.mean([abs(MList[0]-MList[1]),abs(MList[2]-MList[3])])
+			fwd=np.mean([MList[0],MList[2]])
+			rev=np.mean([MList[1],MList[3]])
+			p_value=Gmt(MList)
+			#print(c,p,dCG[c][p],p_value)
+			if p_value<=pvalues:
+				Fr_CG.write(c+"\t"+p+"\t"+str(int(p)+1)+"\t"+str(fwd)+"\t"+str(rev)+"\n")
 	for c in dCHG:
 		for p in dCHG[c]:
-			p_value=Gmt(dCHG[c][p])
+			MList=dCG[c][p]
+			fwd=np.mean([MList[0],MList[2]])
+			rev=np.mean([MList[1],MList[3]])
+			p_value=Gmt(MList)
 			if p_value<=pvalues:
-				Fr_CHG.write(c+"\t"+p+"\t"+str(int(p)+2)+"\n")
+				Fr_CHG.write(c+"\t"+p+"\t"+str(int(p)+2)+"\t"+str(fwd)+"\t"+str(rev)+"\n")
 	Fr_CG.close()
 	Fr_CHG.close()
-	os.system("bedtools sort -i %s_CG_hemi_ori.bed|bedtools merge -d 5 -i - >%s_CG_hemi_final.bed"%(prefix,prefix)) #-d need change
-	os.system("bedtools sort -i %s_CHG_hemi_ori.bed|bedtools merge -d 5 -i - >%s_CHG_hemi_final.bed"%(prefix,prefix)) #-d need change
+	os.system("awk '$4-$5>=%s||$4-$5<=%s{print $1\"\t\"$2\"\t\"$3}' %s_CG_hemi_ori.bed|bedtools sort -i -|bedtools merge -d 5 -i - >%s_CG_hemi_final.bed"%(diff,-1*diff,prefix,prefix)) #-d need change
+	os.system("awk '$4-$5>=%s||$4-$5<=%s{print $1\"\t\"$2\"\t\"$3}' %s_CHG_hemi_ori.bed|bedtools sort -i -|bedtools merge -d 5 -i - >%s_CHG_hemi_final.bed"%(diff,-1*diff,prefix,prefix)) #-d need change
