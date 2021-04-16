@@ -23,11 +23,13 @@ def GetCGHemi(f,cutoff):
 		rev_um=float(rev[4])
 		oddsratio, pvalue = stats.fisher_exact([[fwd_m,rev_m],[fwd_um,rev_um]])
 		if fwd_m==0:
-			fwd_m=epsilon
-		fwd_p=fwd_m/(fwd_m+fwd_um)
+			fwd_p=0
+		else:
+			fwd_p=fwd_m/(fwd_m+fwd_um)
 		if rev_m==0:
-			rev_m=epsilon
-		rev_p=rev_m/(rev_m+rev_um)
+			rev_p=0
+		else:
+			rev_p=rev_m/(rev_m+rev_um)
 		#fc=np.log2(fwd_p/rev_p)
 		diff=abs(fwd_p-rev_p)
 		if pvalue<=cutoff:
@@ -56,11 +58,13 @@ def GetCHGHemi(f,cutoff):
 		rev_um=float(rev[4])
 		oddsratio, pvalue = stats.fisher_exact([[fwd_m,rev_m],[fwd_um,rev_um]])
 		if fwd_m==0:
-			fwd_m=epsilon
-		fwd_p=fwd_m/(fwd_m+fwd_um)
+			fwd_p=0
+		else:
+			fwd_p=fwd_m/(fwd_m+fwd_um)
 		if rev_m==0:
-			rev_m=epsilon
-		rev_p=rev_m/(rev_m+rev_um)
+			rev_p=0
+		else:
+			rev_p=rev_m/(rev_m+rev_um)
 		#fc=np.log2(fwd_p/rev_p)
 		diff=abs(fwd_p-rev_p)
 		if pvalue<=cutoff:

@@ -129,7 +129,7 @@ if __name__ == '__main__':
 				Fr_CG.write(c+"\t"+p+"\t"+str(int(p)+1)+"\t"+str(fwd)+"\t"+str(rev)+"\n")
 	for c in dCHG:
 		for p in dCHG[c]:
-			MList=dCG[c][p]
+			MList=dCHG[c][p]
 			fwd=np.mean([MList[0],MList[2]])
 			rev=np.mean([MList[1],MList[3]])
 			p_value=Gmt(MList)
